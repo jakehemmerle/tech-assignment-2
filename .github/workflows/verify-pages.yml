@@ -1,0 +1,38 @@
+name: Verify Beads Viewer
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'bv-pages/**'
+      - 'e2e/**'
+
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'bv-pages/**'
+      - 'e2e/**'
+
+  workflow_dispatch:
+
+jobs:
+  playwright:
+    name: Playwright Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install dependencies
+        run: |
+          npm install -g serve
+          npx playwright install --with-deps chromium
+
+      - name: Run Playwright tests
+        working-directory: e2e
+        run: npx playwright test --config=playwright.config.js
