@@ -1,0 +1,760 @@
+{
+  "meta": {
+    "version": "1.0.0",
+    "generated_at": "2026-03-17T11:33:42.470563-05:00",
+    "phase2_ready": true,
+    "issue_count": 106,
+    "compute_time_ms": 0
+  },
+  "quick_ref": {
+    "open_count": 101,
+    "actionable_count": 10,
+    "blocked_count": 91,
+    "in_progress_count": 0,
+    "top_picks": [
+      {
+        "id": "p1-n4e",
+        "title": "M1.1: Foundation — Points award + player profile",
+        "score": 0.430800387612661,
+        "reasons": [
+          "🎯 Completing this unblocks 3 downstream issues (p1-04r, p1-7qs, p1-k6d)",
+          "📊 High centrality in dependency graph (PageRank: 51%)",
+          "⚡ Low effort, high impact - good starting point",
+          "✅ Currently unclaimed - available for work",
+          "🚨 High priority (P1) - prioritize this work"
+        ],
+        "unblocks": 3
+      },
+      {
+        "id": "p1-lym",
+        "title": "Write test spec: points calculation from BB ranges",
+        "score": 0.33443720954534406,
+        "reasons": [
+          "🔓 Unblocks 1 item(s): p1-ss7",
+          "📊 High centrality in dependency graph (PageRank: 71%)",
+          "⚡ Low effort, high impact - good starting point",
+          "✅ Currently unclaimed - available for work",
+          "🚨 High priority (P1) - prioritize this work"
+        ],
+        "unblocks": 1
+      }
+    ]
+  },
+  "recommendations": [
+    {
+      "id": "p1-a4g",
+      "title": "CHECKPOINT: Verify M1.1 foundation e2e",
+      "type": "task",
+      "status": "open",
+      "priority": 1,
+      "labels": null,
+      "score": 0.5428831469038674,
+      "breakdown": {
+        "pagerank": 0.22,
+        "betweenness": 0.11771494518176576,
+        "blocker_ratio": 0.13,
+        "staleness": 0.0011843454969714508,
+        "priority_boost": 0.07500000000000001,
+        "time_to_impact": 0.09625,
+        "urgency": 0.004826633469644875,
+        "risk": 0.0020000000000000005,
+        "pagerank_norm": 1,
+        "betweenness_norm": 0.5885747259088288,
+        "blocker_ratio_norm": 1,
+        "staleness_norm": 0.023686909939429013,
+        "priority_boost_norm": 0.75,
+        "time_to_impact_norm": 0.9624999999999999,
+        "urgency_norm": 0.048266334696448754,
+        "risk_norm": 0.020000000000000004,
+        "time_to_impact_explanation": "Deep in critical path (depth 25), median estimate 60m",
+        "risk_explanation": "Low risk - stable dependency structure",
+        "risk_signals": {
+          "fan_variance": 0,
+          "activity_churn": 0,
+          "cross_repo_risk": 0,
+          "status_risk": 0.1,
+          "composite_risk": 0.020000000000000004,
+          "explanation": "Low risk - stable dependency structure"
+        }
+      },
+      "action": "Work on p1-6pp first to unblock this",
+      "reasons": [
+        "🎯 Completing this unblocks 3 downstream issues (p1-4oh, p1-kj5, p1-zv0)",
+        "🔀 Critical path bottleneck (betweenness: 59%)",
+        "📊 High centrality in dependency graph (PageRank: 100%)",
+        "✅ Currently unclaimed - available for work",
+        "⏳ Blocked by 3 items - need to clear dependencies",
+        "🚨 High priority (P1) - prioritize this work"
+      ],
+      "unblocks_ids": [
+        "p1-4oh",
+        "p1-kj5",
+        "p1-zv0"
+      ],
+      "blocked_by": [
+        "p1-6pp",
+        "p1-6sy",
+        "p1-qzi"
+      ]
+    },
+    {
+      "id": "p1-2v4",
+      "title": "Create RTK Query API slice",
+      "type": "task",
+      "status": "open",
+      "priority": 1,
+      "labels": null,
+      "score": 0.5045319871543908,
+      "breakdown": {
+        "pagerank": 0.08773979077824728,
+        "betweenness": 0.1956722446624351,
+        "blocker_ratio": 0.08666666666666667,
+        "staleness": 0.0011826479661072532,
+        "priority_boost": 0.07500000000000001,
+        "time_to_impact": 0.09625,
+        "urgency": 0.0048200601471021344,
+        "risk": 0.0020000000000000005,
+        "pagerank_norm": 0.3988172308102149,
+        "betweenness_norm": 0.9783612233121755,
+        "blocker_ratio_norm": 0.6666666666666666,
+        "staleness_norm": 0.023652959322145062,
+        "priority_boost_norm": 0.75,
+        "time_to_impact_norm": 0.9624999999999999,
+        "urgency_norm": 0.04820060147102134,
+        "risk_norm": 0.020000000000000004,
+        "time_to_impact_explanation": "Deep in critical path (depth 15), median estimate 60m",
+        "risk_explanation": "Low risk - stable dependency structure",
+        "risk_signals": {
+          "fan_variance": 0,
+          "activity_churn": 0,
+          "cross_repo_risk": 0,
+          "status_risk": 0.1,
+          "composite_risk": 0.020000000000000004,
+          "explanation": "Low risk - stable dependency structure"
+        }
+      },
+      "action": "Work on p1-luz first to unblock this",
+      "reasons": [
+        "🎯 Completing this unblocks 4 downstream issues (p1-5yz, p1-acp, +2 more)",
+        "🔀 Critical path bottleneck (betweenness: 98%)",
+        "📊 High centrality in dependency graph (PageRank: 40%)",
+        "✅ Currently unclaimed - available for work",
+        "⏳ Blocked by p1-luz - complete that first",
+        "🚨 High priority (P1) - prioritize this work"
+      ],
+      "unblocks_ids": [
+        "p1-5yz",
+        "p1-acp",
+        "p1-liv",
+        "p1-ny7"
+      ],
+      "blocked_by": [
+        "p1-luz"
+      ]
+    },
+    {
+      "id": "p1-pym",
+      "title": "Implement points service: awardPoints",
+      "type": "task",
+      "status": "open",
+      "priority": 1,
+      "labels": null,
+      "score": 0.4491337741109304,
+      "breakdown": {
+        "pagerank": 0.19303750795919303,
+        "betweenness": 0.04154645124062321,
+        "blocker_ratio": 0.065,
+        "staleness": 0.0011843647870949077,
+        "priority_boost": 0.07500000000000001,
+        "time_to_impact": 0.09625,
+        "urgency": 0.004826708160996041,
+        "risk": 0.0020000000000000005,
+        "pagerank_norm": 0.877443217996332,
+        "betweenness_norm": 0.20773225620311603,
+        "blocker_ratio_norm": 0.5,
+        "staleness_norm": 0.02368729574189815,
+        "priority_boost_norm": 0.75,
+        "time_to_impact_norm": 0.9624999999999999,
+        "urgency_norm": 0.048267081609960405,
+        "risk_norm": 0.020000000000000004,
+        "time_to_impact_explanation": "Deep in critical path (depth 27), median estimate 60m",
+        "risk_explanation": "Low risk - stable dependency structure",
+        "risk_signals": {
+          "fan_variance": 0,
+          "activity_churn": 0,
+          "cross_repo_risk": 0,
+          "status_risk": 0.1,
+          "composite_risk": 0.020000000000000004,
+          "explanation": "Low risk - stable dependency structure"
+        }
+      },
+      "action": "Work on p1-ss7 first to unblock this",
+      "reasons": [
+        "🎯 Completing this unblocks 3 downstream issues (p1-6pp, p1-6sy, p1-qzi)",
+        "📊 High centrality in dependency graph (PageRank: 88%)",
+        "✅ Currently unclaimed - available for work",
+        "⏳ Blocked by p1-ss7 - complete that first",
+        "🚨 High priority (P1) - prioritize this work"
+      ],
+      "unblocks_ids": [
+        "p1-6pp",
+        "p1-6sy",
+        "p1-qzi"
+      ],
+      "blocked_by": [
+        "p1-ss7"
+      ]
+    },
+    {
+      "id": "p1-n4e",
+      "title": "M1.1: Foundation — Points award + player profile",
+      "type": "epic",
+      "status": "open",
+      "priority": 1,
+      "labels": null,
+      "score": 0.430800387612661,
+      "breakdown": {
+        "pagerank": 0.11266881282554124,
+        "betweenness": 0,
+        "blocker_ratio": 0.13,
+        "staleness": 0.0011867760525270062,
+        "priority_boost": 0.07500000000000001,
+        "time_to_impact": 0.07525,
+        "urgency": 0.004836043607415308,
+        "risk": 0.0020000000000000005,
+        "pagerank_norm": 0.5121309673888238,
+        "betweenness_norm": 0,
+        "blocker_ratio_norm": 1,
+        "staleness_norm": 0.023735521050540123,
+        "priority_boost_norm": 0.75,
+        "time_to_impact_norm": 0.7525,
+        "urgency_norm": 0.04836043607415308,
+        "risk_norm": 0.020000000000000004,
+        "time_to_impact_explanation": "Deep in critical path (depth 7), median estimate 60m",
+        "risk_explanation": "Low risk - stable dependency structure",
+        "risk_signals": {
+          "fan_variance": 0,
+          "activity_churn": 0,
+          "cross_repo_risk": 0,
+          "status_risk": 0.1,
+          "composite_risk": 0.020000000000000004,
+          "explanation": "Low risk - stable dependency structure"
+        }
+      },
+      "action": "Quick win - start here for fast progress",
+      "reasons": [
+        "🎯 Completing this unblocks 3 downstream issues (p1-04r, p1-7qs, p1-k6d)",
+        "📊 High centrality in dependency graph (PageRank: 51%)",
+        "⚡ Low effort, high impact - good starting point",
+        "✅ Currently unclaimed - available for work",
+        "🚨 High priority (P1) - prioritize this work"
+      ],
+      "unblocks_ids": [
+        "p1-04r",
+        "p1-7qs",
+        "p1-k6d"
+      ]
+    },
+    {
+      "id": "p1-ugn",
+      "title": "CHECKPOINT: Verify M1.7 React dashboard",
+      "type": "task",
+      "status": "open",
+      "priority": 1,
+      "labels": null,
+      "score": 0.3846552364935952,
+      "breakdown": {
+        "pagerank": 0.06278699032610635,
+        "betweenness": 0.19913444893248702,
+        "blocker_ratio": 0.10833333333333334,
+        "staleness": 0.0011826479661072532,
+        "priority_boost": 0.07500000000000001,
+        "time_to_impact": 0.09625,
+        "urgency": 0.0048200601471021344,
+        "risk": 0.0020000000000000005,
+        "pagerank_norm": 0.28539541057321066,
+        "betweenness_norm": 0.9956722446624351,
+        "blocker_ratio_norm": 0.8333333333333334,
+        "staleness_norm": 0.023652959322145062,
+        "priority_boost_norm": 0.75,
+        "time_to_impact_norm": 0.9624999999999999,
+        "urgency_norm": 0.04820060147102134,
+        "risk_norm": 0.020000000000000004,
+        "time_to_impact_explanation": "Deep in critical path (depth 12), median estimate 60m",
+        "risk_explanation": "Low risk - stable dependency structure",
+        "risk_signals": {
+          "fan_variance": 0,
+          "activity_churn": 0,
+          "cross_repo_risk": 0,
+          "status_risk": 0.1,
+          "composite_risk": 0.020000000000000004,
+          "explanation": "Low risk - stable dependency structure"
+        }
+      },
+      "action": "Work on p1-dpn first to unblock this",
+      "reasons": [
+        "🔀 Critical path bottleneck (betweenness: 100%)",
+        "✅ Currently unclaimed - available for work",
+        "⏳ Blocked by p1-dpn - complete that first",
+        "🚨 High priority (P1) - prioritize this work"
+      ],
+      "blocked_by": [
+        "p1-dpn"
+      ]
+    },
+    {
+      "id": "p1-luz",
+      "title": "Write test spec: React dashboard components (RTL)",
+      "type": "task",
+      "status": "open",
+      "priority": 1,
+      "labels": null,
+      "score": 0.3700185207635027,
+      "breakdown": {
+        "pagerank": 0.08417940849539718,
+        "betweenness": 0.19307559145989614,
+        "blocker_ratio": 0.021666666666666667,
+        "staleness": 0.0011826672562307101,
+        "priority_boost": 0.07500000000000001,
+        "time_to_impact": 0.09625,
+        "urgency": 0.004820134849321878,
+        "risk": 0.009566275220348463,
+        "pagerank_norm": 0.3826336749790781,
+        "betweenness_norm": 0.9653779572994806,
+        "blocker_ratio_norm": 0.16666666666666666,
+        "staleness_norm": 0.0236533451246142,
+        "priority_boost_norm": 0.75,
+        "time_to_impact_norm": 0.9624999999999999,
+        "urgency_norm": 0.048201348493218776,
+        "risk_norm": 0.09566275220348462,
+        "time_to_impact_explanation": "Deep in critical path (depth 16), median estimate 60m",
+        "risk_explanation": "Low risk - stable dependency structure",
+        "risk_signals": {
+          "fan_variance": 0.2522091740116154,
+          "activity_churn": 0,
+          "cross_repo_risk": 0,
+          "status_risk": 0.1,
+          "composite_risk": 0.09566275220348462,
+          "explanation": "Low risk - stable dependency structure"
+        }
+      },
+      "action": "Work on p1-7zz first to unblock this",
+      "reasons": [
+        "🔓 Unblocks 1 item(s): p1-2v4",
+        "🔀 Critical path bottleneck (betweenness: 97%)",
+        "📊 High centrality in dependency graph (PageRank: 38%)",
+        "✅ Currently unclaimed - available for work",
+        "⏳ Blocked by 4 items - need to clear dependencies",
+        "🚨 High priority (P1) - prioritize this work"
+      ],
+      "unblocks_ids": [
+        "p1-2v4"
+      ],
+      "blocked_by": [
+        "p1-7zz",
+        "p1-a4g",
+        "p1-dw8",
+        "p1-ou1"
+      ]
+    },
+    {
+      "id": "p1-dpn",
+      "title": "Wire dashboard components + verify Login",
+      "type": "task",
+      "status": "open",
+      "priority": 1,
+      "labels": null,
+      "score": 0.3547223522946908,
+      "breakdown": {
+        "pagerank": 0.06296969992682509,
+        "betweenness": 0.2,
+        "blocker_ratio": 0.021666666666666667,
+        "staleness": 0.0011826479661072532,
+        "priority_boost": 0.07500000000000001,
+        "time_to_impact": 0.09625,
+        "urgency": 0.0048200601471021344,
+        "risk": 0.0020000000000000005,
+        "pagerank_norm": 0.2862259087582959,
+        "betweenness_norm": 1,
+        "blocker_ratio_norm": 0.16666666666666666,
+        "staleness_norm": 0.023652959322145062,
+        "priority_boost_norm": 0.75,
+        "time_to_impact_norm": 0.9624999999999999,
+        "urgency_norm": 0.04820060147102134,
+        "risk_norm": 0.020000000000000004,
+        "time_to_impact_explanation": "Deep in critical path (depth 13), median estimate 60m",
+        "risk_explanation": "Low risk - stable dependency structure",
+        "risk_signals": {
+          "fan_variance": 0,
+          "activity_churn": 0,
+          "cross_repo_risk": 0,
+          "status_risk": 0.1,
+          "composite_risk": 0.020000000000000004,
+          "explanation": "Low risk - stable dependency structure"
+        }
+      },
+      "action": "Work on p1-5yz first to unblock this",
+      "reasons": [
+        "🔓 Unblocks 1 item(s): p1-ugn",
+        "🔀 Critical path bottleneck (betweenness: 100%)",
+        "✅ Currently unclaimed - available for work",
+        "⏳ Blocked by 4 items - need to clear dependencies",
+        "🚨 High priority (P1) - prioritize this work"
+      ],
+      "unblocks_ids": [
+        "p1-ugn"
+      ],
+      "blocked_by": [
+        "p1-5yz",
+        "p1-acp",
+        "p1-liv",
+        "p1-ny7"
+      ]
+    },
+    {
+      "id": "p1-ss7",
+      "title": "Rewrite constants.js — BB range point mapping",
+      "type": "task",
+      "status": "open",
+      "priority": 1,
+      "labels": null,
+      "score": 0.3465392407597002,
+      "breakdown": {
+        "pagerank": 0.17368456869205173,
+        "betweenness": 0.021061742642815934,
+        "blocker_ratio": 0.021666666666666667,
+        "staleness": 0.0011843647870949077,
+        "priority_boost": 0.07500000000000001,
+        "time_to_impact": 0.09625,
+        "urgency": 0.004826708160996041,
+        "risk": 0.0020000000000000005,
+        "pagerank_norm": 0.7894753122365988,
+        "betweenness_norm": 0.10530871321407966,
+        "blocker_ratio_norm": 0.16666666666666666,
+        "staleness_norm": 0.02368729574189815,
+        "priority_boost_norm": 0.75,
+        "time_to_impact_norm": 0.9624999999999999,
+        "urgency_norm": 0.048267081609960405,
+        "risk_norm": 0.020000000000000004,
+        "time_to_impact_explanation": "Deep in critical path (depth 28), median estimate 60m",
+        "risk_explanation": "Low risk - stable dependency structure",
+        "risk_signals": {
+          "fan_variance": 0,
+          "activity_churn": 0,
+          "cross_repo_risk": 0,
+          "status_risk": 0.1,
+          "composite_risk": 0.020000000000000004,
+          "explanation": "Low risk - stable dependency structure"
+        }
+      },
+      "action": "Work on p1-lym first to unblock this",
+      "reasons": [
+        "🔓 Unblocks 1 item(s): p1-pym",
+        "📊 High centrality in dependency graph (PageRank: 79%)",
+        "✅ Currently unclaimed - available for work",
+        "⏳ Blocked by p1-lym - complete that first",
+        "🚨 High priority (P1) - prioritize this work"
+      ],
+      "unblocks_ids": [
+        "p1-pym"
+      ],
+      "blocked_by": [
+        "p1-lym"
+      ]
+    },
+    {
+      "id": "p1-lym",
+      "title": "Write test spec: points calculation from BB ranges",
+      "type": "task",
+      "status": "open",
+      "priority": 1,
+      "labels": null,
+      "score": 0.33443720954534406,
+      "breakdown": {
+        "pagerank": 0.1572336833797648,
+        "betweenness": 0,
+        "blocker_ratio": 0.021666666666666667,
+        "staleness": 0.0011843647870949077,
+        "priority_boost": 0.07500000000000001,
+        "time_to_impact": 0.09625,
+        "urgency": 0.004826708160996041,
+        "risk": 0.0020000000000000005,
+        "pagerank_norm": 0.7146985608171127,
+        "betweenness_norm": 0,
+        "blocker_ratio_norm": 0.16666666666666666,
+        "staleness_norm": 0.02368729574189815,
+        "priority_boost_norm": 0.75,
+        "time_to_impact_norm": 0.9624999999999999,
+        "urgency_norm": 0.048267081609960405,
+        "risk_norm": 0.020000000000000004,
+        "time_to_impact_explanation": "Deep in critical path (depth 29), median estimate 60m",
+        "risk_explanation": "Low risk - stable dependency structure",
+        "risk_signals": {
+          "fan_variance": 0,
+          "activity_churn": 0,
+          "cross_repo_risk": 0,
+          "status_risk": 0.1,
+          "composite_risk": 0.020000000000000004,
+          "explanation": "Low risk - stable dependency structure"
+        }
+      },
+      "action": "Quick win - start here for fast progress",
+      "reasons": [
+        "🔓 Unblocks 1 item(s): p1-ss7",
+        "📊 High centrality in dependency graph (PageRank: 71%)",
+        "⚡ Low effort, high impact - good starting point",
+        "✅ Currently unclaimed - available for work",
+        "🚨 High priority (P1) - prioritize this work"
+      ],
+      "unblocks_ids": [
+        "p1-ss7"
+      ]
+    },
+    {
+      "id": "p1-ki2",
+      "title": "CHECKPOINT: Verify M1.6 admin endpoints",
+      "type": "task",
+      "status": "open",
+      "priority": 1,
+      "labels": null,
+      "score": 0.3096880918631963,
+      "breakdown": {
+        "pagerank": 0.06278699032610635,
+        "betweenness": 0.0920369301788806,
+        "blocker_ratio": 0.10833333333333334,
+        "staleness": 0.0011829758982060186,
+        "priority_boost": 0.07500000000000001,
+        "time_to_impact": 0.09625,
+        "urgency": 0.004821330068039831,
+        "risk": 0.0020000000000000005,
+        "pagerank_norm": 0.28539541057321066,
+        "betweenness_norm": 0.4601846508944029,
+        "blocker_ratio_norm": 0.8333333333333334,
+        "staleness_norm": 0.023659517964120372,
+        "priority_boost_norm": 0.75,
+        "time_to_impact_norm": 0.9624999999999999,
+        "urgency_norm": 0.04821330068039831,
+        "risk_norm": 0.020000000000000004,
+        "time_to_impact_explanation": "Deep in critical path (depth 12), median estimate 60m",
+        "risk_explanation": "Low risk - stable dependency structure",
+        "risk_signals": {
+          "fan_variance": 0,
+          "activity_churn": 0,
+          "cross_repo_risk": 0,
+          "status_risk": 0.1,
+          "composite_risk": 0.020000000000000004,
+          "explanation": "Low risk - stable dependency structure"
+        }
+      },
+      "action": "Work on p1-pxh first to unblock this",
+      "reasons": [
+        "✅ Currently unclaimed - available for work",
+        "⏳ Blocked by p1-pxh - complete that first",
+        "🚨 High priority (P1) - prioritize this work"
+      ],
+      "blocked_by": [
+        "p1-pxh"
+      ]
+    }
+  ],
+  "quick_wins": [
+    {
+      "id": "p1-2v4",
+      "title": "Create RTK Query API slice",
+      "score": 1.028771237954945,
+      "reason": "Unblocks 4 items, high priority",
+      "unblocks_ids": [
+        "p1-5yz",
+        "p1-acp",
+        "p1-liv",
+        "p1-ny7"
+      ]
+    },
+    {
+      "id": "p1-2kv",
+      "title": "Implement notification service",
+      "score": 0.9339850002884625,
+      "reason": "Unblocks 2 items, high priority",
+      "unblocks_ids": [
+        "p1-7nm",
+        "p1-8ah"
+      ]
+    },
+    {
+      "id": "p1-47l",
+      "title": "Implement checkTierProgression in points service",
+      "score": 0.9339850002884625,
+      "reason": "Unblocks 2 items, high priority",
+      "unblocks_ids": [
+        "p1-0ee",
+        "p1-5eg"
+      ]
+    },
+    {
+      "id": "p1-3tz",
+      "title": "Implement GET /admin/leaderboard",
+      "score": 0.9,
+      "reason": "Unblocks 1 items, high priority",
+      "unblocks_ids": [
+        "p1-pxh"
+      ]
+    },
+    {
+      "id": "p1-4mf",
+      "title": "Ensure all endpoints match spec response shapes",
+      "score": 0.9,
+      "reason": "Unblocks 1 items, high priority",
+      "unblocks_ids": [
+        "p1-zt4"
+      ]
+    }
+  ],
+  "blockers_to_clear": [
+    {
+      "id": "p1-2v4",
+      "title": "Create RTK Query API slice",
+      "unblocks_count": 4,
+      "unblocks_ids": [
+        "p1-5yz",
+        "p1-acp",
+        "p1-liv",
+        "p1-ny7"
+      ],
+      "actionable": false,
+      "blocked_by": [
+        "p1-luz"
+      ]
+    },
+    {
+      "id": "p1-a4g",
+      "title": "CHECKPOINT: Verify M1.1 foundation e2e",
+      "unblocks_count": 3,
+      "unblocks_ids": [
+        "p1-4oh",
+        "p1-kj5",
+        "p1-zv0"
+      ],
+      "actionable": false,
+      "blocked_by": [
+        "p1-6pp",
+        "p1-6sy",
+        "p1-qzi"
+      ]
+    },
+    {
+      "id": "p1-n4e",
+      "title": "M1.1: Foundation — Points award + player profile",
+      "unblocks_count": 3,
+      "unblocks_ids": [
+        "p1-04r",
+        "p1-7qs",
+        "p1-k6d"
+      ],
+      "actionable": true
+    },
+    {
+      "id": "p1-pym",
+      "title": "Implement points service: awardPoints",
+      "unblocks_count": 3,
+      "unblocks_ids": [
+        "p1-6pp",
+        "p1-6sy",
+        "p1-qzi"
+      ],
+      "actionable": false,
+      "blocked_by": [
+        "p1-ss7"
+      ]
+    },
+    {
+      "id": "p1-2kv",
+      "title": "Implement notification service",
+      "unblocks_count": 2,
+      "unblocks_ids": [
+        "p1-7nm",
+        "p1-8ah"
+      ],
+      "actionable": false,
+      "blocked_by": [
+        "p1-fjz"
+      ]
+    }
+  ],
+  "project_health": {
+    "counts": {
+      "total": 106,
+      "open": 101,
+      "closed": 5,
+      "blocked": 91,
+      "actionable": 10,
+      "by_status": {
+        "closed": 5,
+        "hooked": 2,
+        "open": 98,
+        "pinned": 1
+      },
+      "by_type": {
+        "epic": 28,
+        "task": 78
+      },
+      "by_priority": {
+        "1": 58,
+        "2": 32,
+        "3": 16
+      }
+    },
+    "graph": {
+      "node_count": 106,
+      "edge_count": 168,
+      "density": 0.01509433962264151,
+      "has_cycles": false,
+      "phase2_ready": true
+    },
+    "velocity": {
+      "closed_last_7_days": 5,
+      "closed_last_30_days": 5,
+      "avg_days_to_close": 0.0008773148148148148,
+      "weekly": [
+        {
+          "week_start": "2026-03-16T00:00:00Z",
+          "closed": 5
+        },
+        {
+          "week_start": "2026-03-09T00:00:00Z",
+          "closed": 0
+        },
+        {
+          "week_start": "2026-03-02T00:00:00Z",
+          "closed": 0
+        },
+        {
+          "week_start": "2026-02-23T00:00:00Z",
+          "closed": 0
+        },
+        {
+          "week_start": "2026-02-16T00:00:00Z",
+          "closed": 0
+        },
+        {
+          "week_start": "2026-02-09T00:00:00Z",
+          "closed": 0
+        },
+        {
+          "week_start": "2026-02-02T00:00:00Z",
+          "closed": 0
+        },
+        {
+          "week_start": "2026-01-26T00:00:00Z",
+          "closed": 0
+        }
+      ]
+    }
+  },
+  "commands": {
+    "claim_top": "CI=1 br update p1-a4g --status in_progress --json",
+    "show_top": "CI=1 br show p1-a4g --json",
+    "list_ready": "CI=1 br ready --json",
+    "list_blocked": "CI=1 br blocked --json",
+    "refresh_triage": "bv --robot-triage"
+  }
+}
