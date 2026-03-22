@@ -1,43 +1,34 @@
 'use strict';
 
 const { Router } = require('express');
+const pointsService = require('../services/points.service');
+
 const router = Router();
 
-/**
- * POST /api/v1/points/award
- *
- * Award points to a player. Candidates implement this.
- *
- * Expected body:
- *   { playerId: string, points: number, reason: string }
- *
- * Expected response:
- *   { playerId, newBalance, tier, transaction }
- */
-router.post('/award', (req, res) => {
-  res.status(501).json({
-    error: 'Not implemented',
-    message: 'Implement point awarding logic here. See challenge docs for requirements.',
-    hint: {
-      input: { playerId: 'string', points: 'number', reason: 'string' },
-      output: { playerId: 'string', newBalance: 'number', tier: 'string', transaction: 'object' },
-    },
-  });
-});
+router.post('/award', async (req, res) => {
+  try {
+    const { playerId, tableId, tableStakes, bigBlind, handId } = req.body;
 
-/**
- * GET /api/v1/points/leaderboard
- *
- * Get the points leaderboard. Candidates implement this.
- *
- * Expected response:
- *   { leaderboard: [{ playerId, username, points, tier, rank }] }
- */
-router.get('/leaderboard', (req, res) => {
-  res.status(501).json({
-    error: 'Not implemented',
-    message: 'Implement leaderboard query here. See challenge docs for requirements.',
-  });
+    if (!playerId || bigBlind == null) {
+      return res.status(400).json({
+        error: 'Bad Request',
+        message: 'playerId and bigBlind are required',
+      });
+    }
+
+    const result = await pointsService.awardPoints({
+      playerId,
+      tableId: tableId || null,
+      tableStakes: tableStakes || '',
+      bigBlind: parseFloat(bigBlind),
+      handId: handId || null,
+    });
+
+    res.json(result);
+  } catch (err) {
+    console.error('Award points error:', err);
+    res.status(500).json({ error: 'Internal error', message: err.message });
+  }
 });
 
 module.exports = router;

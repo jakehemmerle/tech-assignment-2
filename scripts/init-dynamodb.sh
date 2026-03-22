@@ -39,6 +39,24 @@ aws dynamodb create-table $AWS_OPTS \
   --provisioned-throughput ReadCapacityUnits=5,WriteCapacityUnits=5 \
   2>/dev/null && echo "  Created: rewards-transactions" || echo "  Exists:  rewards-transactions"
 
+aws dynamodb create-table $AWS_OPTS \
+  --table-name rewards-leaderboard \
+  --attribute-definitions \
+    AttributeName=monthKey,AttributeType=S \
+    AttributeName=playerId,AttributeType=S \
+  --key-schema AttributeName=monthKey,KeyType=HASH AttributeName=playerId,KeyType=RANGE \
+  --provisioned-throughput ReadCapacityUnits=5,WriteCapacityUnits=5 \
+  2>/dev/null && echo "  Created: rewards-leaderboard" || echo "  Exists:  rewards-leaderboard"
+
+aws dynamodb create-table $AWS_OPTS \
+  --table-name rewards-notifications \
+  --attribute-definitions \
+    AttributeName=playerId,AttributeType=S \
+    AttributeName=notificationId,AttributeType=S \
+  --key-schema AttributeName=playerId,KeyType=HASH AttributeName=notificationId,KeyType=RANGE \
+  --provisioned-throughput ReadCapacityUnits=5,WriteCapacityUnits=5 \
+  2>/dev/null && echo "  Created: rewards-notifications" || echo "  Exists:  rewards-notifications"
+
 # Streaks tables (Option C)
 aws dynamodb create-table $AWS_OPTS \
   --table-name streaks-players \

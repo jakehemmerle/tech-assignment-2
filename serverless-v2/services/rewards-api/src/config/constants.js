@@ -1,45 +1,56 @@
 'use strict';
 
-/**
- * Rewards tier definitions.
- * Points thresholds for tier progression.
- */
-const TIERS = {
-  BRONZE: { name: 'Bronze', minPoints: 0, multiplier: 1.0 },
-  SILVER: { name: 'Silver', minPoints: 500, multiplier: 1.25 },
-  GOLD: { name: 'Gold', minPoints: 2000, multiplier: 1.5 },
-  PLATINUM: { name: 'Platinum', minPoints: 10000, multiplier: 2.0 },
-};
+const TIERS = [
+  { level: 1, name: 'Bronze', minPoints: 0, multiplier: 1.0 },
+  { level: 2, name: 'Silver', minPoints: 500, multiplier: 1.25 },
+  { level: 3, name: 'Gold', minPoints: 2000, multiplier: 1.5 },
+  { level: 4, name: 'Platinum', minPoints: 10000, multiplier: 2.0 },
+];
 
-/**
- * Point award rules — how points are earned.
- */
-const POINT_RULES = {
-  HAND_PLAYED: { points: 1, description: 'Played a hand' },
-  HAND_WON: { points: 5, description: 'Won a hand' },
-  TOURNAMENT_ENTRY: { points: 10, description: 'Entered a tournament' },
-  TOURNAMENT_WIN: { points: 50, description: 'Won a tournament' },
-  DAILY_LOGIN: { points: 2, description: 'Daily login bonus' },
-  REFERRAL: { points: 100, description: 'Referred a friend' },
-};
+const STAKES_POINTS = [
+  { minBB: 10.0, basePoints: 10 },
+  { minBB: 2.0, basePoints: 5 },
+  { minBB: 0.5, basePoints: 2 },
+  { minBB: 0.1, basePoints: 1 },
+];
 
-/**
- * Get tier for a given point total.
- */
-function getTierForPoints(points) {
-  const tiers = Object.values(TIERS).sort((a, b) => b.minPoints - a.minPoints);
-  return tiers.find((t) => points >= t.minPoints) || TIERS.BRONZE;
+const MILESTONES = [500, 1000, 2500, 5000, 10000];
+
+function getBasePoints(bigBlind) {
+  for (const rule of STAKES_POINTS) {
+    if (bigBlind >= rule.minBB) return rule.basePoints;
+  }
+  return 1;
 }
 
-/**
- * Get the next tier above the current one (or null if at max).
- */
-function getNextTier(currentTierName) {
-  const tierOrder = ['Bronze', 'Silver', 'Gold', 'Platinum'];
-  const currentIndex = tierOrder.indexOf(currentTierName);
-  if (currentIndex === -1 || currentIndex === tierOrder.length - 1) return null;
-  const nextName = tierOrder[currentIndex + 1];
-  return Object.values(TIERS).find((t) => t.name === nextName);
+function getTierForPoints(monthlyPoints) {
+  for (let i = TIERS.length - 1; i >= 0; i--) {
+    if (monthlyPoints >= TIERS[i].minPoints) return TIERS[i];
+  }
+  return TIERS[0];
 }
 
-module.exports = { TIERS, POINT_RULES, getTierForPoints, getNextTier };
+function getNextTier(currentTier) {
+  const idx = TIERS.findIndex((t) => t.name === currentTier.name);
+  return idx < TIERS.length - 1 ? TIERS[idx + 1] : null;
+}
+
+function getTierByLevel(level) {
+  return TIERS.find((t) => t.level === level) || TIERS[0];
+}
+
+function getCurrentMonthKey() {
+  const now = new Date();
+  return `${now.getUTCFullYear()}-${String(now.getUTCMonth() + 1).padStart(2, '0')}`;
+}
+
+module.exports = {
+  TIERS,
+  STAKES_POINTS,
+  MILESTONES,
+  getBasePoints,
+  getTierForPoints,
+  getNextTier,
+  getTierByLevel,
+  getCurrentMonthKey,
+};
