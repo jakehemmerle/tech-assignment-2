@@ -10,22 +10,24 @@ Hijack Poker needs a loyalty rewards system that turns gameplay into a visible p
 - Store point activity as an immutable ledger that supports history, auditability, and downstream projections.
 - Expose lean, documented REST responses for player rewards, history, leaderboard, notifications, and admin operations.
 - Deliver a web dashboard that shows current tier status, transaction history, a tier timeline, and leaderboard context.
-- Create notification records for tier changes and milestone achievements, with unread and dismiss flows.
+- Create and manage tier-change notification records, including dismissal and unread-count behavior.
 - Keep the feature runnable in the local Docker profile with DynamoDB Local and test coverage for core business rules.
 
 ## Non-Goals
 - Real JWT verification or production auth infrastructure beyond the existing local header-based stub.
-- Email, push, or mobile notification delivery; only notification persistence and retrieval are required.
-- Real-time subscriptions, websockets, or live leaderboard streaming.
+- Email, push, or mobile notification delivery.
+- Real-time subscriptions, websockets, SSE, or live leaderboard streaming.
 - Full back-office UI; admin functionality is API-only.
 - Full production scheduling/infrastructure for monthly resets if a manual or locally triggered path is sufficient for the assignment.
 - Broader gameplay integrations outside the rewards award endpoint and sample seeding needed for local development.
+- `handId` idempotency in the first pass.
 
 ## User Stories / Scenarios
 - As a player, I can open the rewards dashboard and see my current tier, monthly progress, lifetime total, and how many points remain until the next tier.
 - As a player, I can review my recent point transactions with enough detail to understand why points were awarded.
 - As a player, I can see the top leaderboard entries for the current month and my own rank even when I am outside the top 100.
-- As a player, I receive an in-app notification when I reach a new tier, cross a milestone, or get adjusted downward during monthly reset.
+- As a player, I receive an in-app notification when I reach a new tier or get adjusted downward during monthly reset.
+- As a player, I can dismiss notifications and see an unread count that stays accurate as notifications are created and dismissed.
 - As a player using a Unity client, I can fetch the same rewards state, history, leaderboard, and notifications through stable REST payloads.
 - As the game processor, I can call a single point-award endpoint with hand context and rely on the rewards service to calculate base points, multiplier, tier advancement, and ledger writes.
 - As an admin, I can inspect a player's rewards profile, manually adjust points with a reason, review the leaderboard with operational identifiers, and apply temporary tier overrides.
@@ -42,19 +44,47 @@ Hijack Poker needs a loyalty rewards system that turns gameplay into a visible p
 - The acceptance criteria require monthly tier resets, immutable transactions, notifications, player endpoints, and admin endpoints even though most of those surfaces do not exist yet in code.
 
 ## Open Questions
-- Should the implementation honor the challenge's requested NestJS + strict TypeScript stack by replacing the current Express/JavaScript service, or should it deliver equivalent behavior within the existing skeleton to stay scope-safe?
 - Should monthly reset be modeled as a manual/admin-triggered flow for the assignment, or should a scheduled path also be implemented locally?
-- What exact milestone thresholds should count as milestone notifications beyond the examples of 500 and 1000 points?
-- Should `handId` be treated as an idempotency key for the award endpoint now, given it is listed as a bonus requirement but materially reduces duplicate awards?
-- Where should admin-only player metadata such as email/display name come from in local development, given player records also exist in MySQL seed data while rewards data lives in DynamoDB?
-- How much historical tier data should be materialized versus derived on read for the 6-month timeline?
-- Should leaderboard ranking be served from a maintained projection table, a GSI-backed query, or a read-time calculation that also returns out-of-top-100 rank?
+- What is the canonical award input contract for stake-band calculation: `bigBlind`, `tableStakes`, or both?
+- How exactly should monthly reset compute and persist the previous-month tier floor?
+- How minimal should manual adjustment semantics be in the first pass beyond credit/debit plus reason?
+- Should milestone notifications remain deferred entirely in the first pass, or should a very small fixed list be added after tier-change notifications are stable?
+- Should leaderboard ranking be served from a maintained projection table, a GSI-backed query, or a read-time calculation that also returns out-of-top-100 competition rank?
 
 ## Rough Approach
-Build the rewards feature around a small set of domain services rather than route-level logic: points awarding, tier evaluation/reset, leaderboard projection, notification creation, and player/admin queries. Treat the immutable ledger as the source of truth for awards, then maintain player summary documents and monthly leaderboard records as write-side projections so dashboard and Unity reads stay simple.
+Build the rewards feature around a small set of domain services rather than route-level logic: points awarding, tier evaluation/reset, leaderboard projection, notification creation, and player/admin queries. Treat the immutable ledger as the source of truth for awards, then maintain player summary documents, notification records, and monthly leaderboard records as write-side projections so dashboard and Unity reads stay simple.
 
-For the backend, add validated request contracts and explicit service modules around the existing rewards API entrypoint, whether that remains Express or is upgraded to Nest-compatible structure. Evolve the DynamoDB model to include monthly points, lifetime points, tier floor, last tier change, month keys, leaderboard sort support, and notification dismissal state. Implement the player-facing endpoints (`/player/rewards`, `/player/rewards/history`, `/leaderboard`, `/player/notifications`, dismiss) and admin endpoints (`/admin/players/:playerId/rewards`, `/admin/points/adjust`, `/admin/leaderboard`, `/admin/tier/override`) with documented response shapes.
+For the backend, treat NestJS + strict TypeScript as a hard requirement and migrate the rewards API implementation out of the current JavaScript Express stub into a typed NestJS structure that still works within the local Docker/serverless workflow. Evolve the DynamoDB model to include monthly points, lifetime points, tier floor, last tier change, month keys, notification dismissed state, and leaderboard support. Store earned points as rounded integers after multiplier application using standard whole-number rounding. Implement the player-facing endpoints (`/player/rewards`, `/player/rewards/history`, `/leaderboard`, `/player/notifications`) and admin endpoints (`/admin/players/:playerId/rewards`, `/admin/points/adjust`, `/admin/leaderboard`, `/admin/tier/override`) with documented response shapes. Keep auth boundaries simple in the first pass: self-service player endpoints and back-office admin endpoints with stubbed guard behavior. Admin-facing display name and email should come from `players.username` and `players.email`, while rewards aggregates remain in DynamoDB and no `players` schema changes are expected.
 
-For the frontend, replace the placeholder dashboard with four concrete panels: summary/progress, recent transactions, tier timeline, and leaderboard/notifications. Keep the login stub for local development, but introduce a thin API layer and normalized client state so web and Unity payloads share the same mental model.
+For the frontend, replace the placeholder dashboard with concrete summary, transaction, leaderboard, and notification surfaces, including a bell unread count and dismiss behavior backed by the API. Keep the login stub for local development, but introduce a thin API layer and normalized client state so web and Unity payloads share the same mental model. Derive the tier timeline on read rather than materializing a dedicated history projection in the first pass.
 
-Testing should focus first on pure business rules: stake-to-base-point mapping, multiplier application, tier progression, reset floor logic, milestone detection, idempotency behavior if adopted, and leaderboard ranking. Integration coverage should at minimum exercise the award flow from request through ledger write, summary update, and notification side effects.
+Testing should focus first on pure business rules: stake-to-base-point mapping, rounded multiplier application, tier progression, reset floor logic, leaderboard ranking with competition-style ties, and tier-change notification side effects. Integration coverage should at minimum exercise the award flow from request through ledger write, summary update, player-table enrichment, notification creation, dismissal, and unread-count reads. `handId` idempotency and real-time delivery stay out of scope for the first pass.
+
+## Clarifications from Human Review
+
+**Q: Should the backend remain in the existing Express/JavaScript skeleton, or is NestJS + strict TypeScript a hard requirement?**
+A: NestJS + strict TypeScript are hard requirements.
+
+**Q: How should multiplier-derived points be represented?**
+A: Earned points should be rounded to the nearest whole integer using standard rounding.
+
+**Q: How should manual adjustments behave in the first pass?**
+A: Keep manual adjustments simple for now and accept follow-up issues as they come rather than designing a broad operational policy up front.
+
+**Q: Where should admin-facing display name and email come from?**
+A: They should always come from the `players` table, specifically `username` and `email`. No `players` schema changes are expected.
+
+**Q: How should the 6-month timeline be produced?**
+A: Derive it on read for now because that is mechanically simpler.
+
+**Q: Is `handId` idempotency in scope?**
+A: No. Leave `handId` idempotency out of scope.
+
+**Q: What is the minimum notification scope for the first pass?**
+A: Persist tier-change notifications, support dismissal, and keep unread counts correct. Do not implement websocket/SSE delivery or email/push delivery.
+
+**Q: How should leaderboard ties and player rank work?**
+A: Use competition ranking (`1, 2, 2, 4`). The player's own rank should still be computed and shown even if they are outside the top leaderboard slice, for example rank 294 when the visible board is top 100.
+
+**Q: How should auth boundaries be handled in the first pass?**
+A: Keep auth simple with separate player and admin boundaries only.
