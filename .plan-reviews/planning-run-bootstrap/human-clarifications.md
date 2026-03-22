@@ -11,4 +11,5 @@
 - `handId` idempotency: explicitly out of scope.
 - Notifications: support both tier-change and milestone notifications, plus dismissal and correct unread counts in the first pass; use fixed monthly milestone thresholds of `500`, `1000`, `2000`, and `10000`, allow literal overlap with tier-threshold notifications, and do not implement websocket/SSE or email/push delivery.
 - Leaderboard rank: use competition ranking (`1, 2, 2, 4`), and the player's own rank must be computable and shown even when outside the visible top slice.
+- Leaderboard storage/query: compute rank on read from current monthly state rather than maintaining a pre-ranked projection.
 - Auth boundaries: keep the first pass limited to simple player and admin separation.
