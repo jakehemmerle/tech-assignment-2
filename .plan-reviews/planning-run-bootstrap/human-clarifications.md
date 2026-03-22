@@ -9,6 +9,6 @@
 - Award input: use `tableStakes` as the source of truth for FR-2 stake-band selection; do not use `bigBlind` to choose the band.
 - Tier timeline: derive on read instead of materializing a dedicated history projection in the first pass.
 - `handId` idempotency: explicitly out of scope.
-- Notifications: support both tier-change and milestone notifications, plus dismissal and correct unread counts in the first pass; no websocket/SSE or email/push delivery.
+- Notifications: support both tier-change and milestone notifications, plus dismissal and correct unread counts in the first pass; use fixed monthly milestone thresholds of `500`, `1000`, `2000`, and `10000`, allow literal overlap with tier-threshold notifications, and do not implement websocket/SSE or email/push delivery.
 - Leaderboard rank: use competition ranking (`1, 2, 2, 4`), and the player's own rank must be computable and shown even when outside the visible top slice.
 - Auth boundaries: keep the first pass limited to simple player and admin separation.
