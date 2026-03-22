@@ -29,9 +29,9 @@ app.use('/api/v1/health', healthRoute);
 
 // Protected routes (require X-Player-Id header)
 app.use('/api/v1/points', authMiddleware, pointsRoute);
+app.use('/api/v1/player/notifications', authMiddleware, notificationsRoute);
 app.use('/api/v1/player', authMiddleware, playerRoute);
 app.use('/api/v1/leaderboard', authMiddleware, leaderboardRoute);
-app.use('/api/v1/player/notifications', authMiddleware, notificationsRoute);
 
 // Admin routes (no auth guard for the challenge — stub)
 app.use('/admin', adminRoute);
