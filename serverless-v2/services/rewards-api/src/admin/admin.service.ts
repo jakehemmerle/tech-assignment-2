@@ -46,6 +46,7 @@ export class AdminService {
       email: identity?.email ?? null,
       nextTierTarget: nextTier?.minPoints ?? null,
       pointsToNextTier: nextTier ? Math.max(0, nextTier.minPoints - player.monthlyPoints) : 0,
+      transactions,
       recentTransactions: transactions.slice(0, 20),
       notifications,
       overrideTier: player.overrideTier ?? null,
@@ -73,6 +74,14 @@ export class AdminService {
       updatedAt: now,
       lastTierChangeAt: now,
     });
+    if (player.monthlyPoints > 0) {
+      await this.dynamoService.putLeaderboardEntry({
+        monthKey: player.monthKey,
+        playerId: player.playerId,
+        tier: payload.tierLevel,
+        monthlyPoints: player.monthlyPoints,
+      });
+    }
 
     return {
       playerId: player.playerId,
