@@ -8,6 +8,11 @@
     "start:engine": "docker compose --profile engine up",
     "start:streaks": "docker compose --profile streaks up",
     "stop": "docker compose down -v",
+    "build:rewards:api": "npm --prefix serverless-v2/services/rewards-api run build",
+    "build:rewards:frontend": "npm --prefix serverless-v2/services/rewards-frontend run build",
+    "test:rewards:api": "npm --prefix serverless-v2/services/rewards-api test",
+    "test:rewards:api:e2e": "npm --prefix serverless-v2/services/rewards-api run test:e2e",
+    "test:rewards:frontend": "npm --prefix serverless-v2/services/rewards-frontend test",
     "seed:rewards": "node scripts/seed-rewards.js",
     "seed:streaks": "node scripts/seed-streaks.js",
     "simulate:hands": "node scripts/simulate-hands.js"

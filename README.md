@@ -21,6 +21,70 @@ Full challenge documentation: **https://hijack-poker.github.io/tech-assignment/*
 
 ---
 
+## Rewards Implementation Notes
+
+This repo is currently built out for **Challenge A: Rewards System**. The implementation focuses on the rewards service because it exercises the core product risks in this assignment: DynamoDB projections, month reconciliation, leaderboard correctness, notifications, and a thin but real React dashboard against the same REST contract used by Unity clients.
+
+### Rewards Setup
+
+```bash
+cp .env.example .env
+docker compose --profile rewards up -d
+
+npm --prefix serverless-v2/services/rewards-api install
+npm --prefix serverless-v2/services/rewards-frontend install
+
+npm run seed:rewards
+```
+
+### Rewards Commands
+
+```bash
+# backend unit tests
+npm run test:rewards:api
+
+# backend e2e tests (requires DynamoDB Local + MySQL from docker compose)
+npm run test:rewards:api:e2e
+
+# frontend component tests
+npm run test:rewards:frontend
+
+# frontend production build
+npm run build:rewards:frontend
+```
+
+### Implemented Scope
+
+- NestJS + strict TypeScript rewards API under `serverless-v2/services/rewards-api`
+- Admin-authenticated point awards and manual adjustments with immutable ledger writes
+- Shared month reconciliation on reads and writes, including manual monthly reset
+- Player rewards summary, history, leaderboard, notifications, and six-month timeline endpoints
+- Admin profile, leaderboard, and tier override endpoints with MySQL username/email enrichment
+- Deterministic rewards seed script that writes aligned players, ledger rows, leaderboard rows, and notifications
+- React dashboard widgets backed by the live rewards API contract instead of generated placeholder data
+
+### Deferred Scope
+
+- `handId` idempotency
+- Scheduled monthly reset automation
+- Realtime notifications
+- Leaderboard caching
+- Automatic expiry processing for tier overrides
+
+### Key Trade-Offs
+
+- Month reconciliation runs on reads and writes, with a manual admin reset endpoint instead of scheduled infrastructure.
+- The leaderboard stores only month, tier, and monthly points; display names come from the rewards player projection and admin emails come from MySQL joins.
+- The six-month tier timeline is derived from current state plus transaction history on read instead of being materialized as a separate monthly snapshot table.
+
+### References
+
+- [Rewards Challenge Doc](docs/challenge-rewards.md)
+- [Rewards API Reference](docs/rewards-api-reference.md)
+- [Local Development Guide](docs/local-development.md)
+
+---
+
 ## Quick Start
 
 ### 1. Clone & configure

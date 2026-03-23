@@ -1,6 +1,7 @@
 - [Home](README.md)
 - [Local Development Guide](local-development.md)
 - [Rewards PRD](rewards-prd.md)
+- [Rewards API Reference](rewards-api-reference.md)
 - **Challenge Options**
   - [A: Rewards Program](challenge-rewards.md)
   - [B: Bomb Pots](challenge-bomb-pots.md)
