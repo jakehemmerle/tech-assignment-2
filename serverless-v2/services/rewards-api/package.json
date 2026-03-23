@@ -7,7 +7,7 @@
     "build": "tsc -p tsconfig.build.json",
     "start": "npm run build && npx serverless offline start --config serverless.offline.yml --host 0.0.0.0",
     "test": "jest --config ./jest.config.js --runInBand",
-    "test:e2e": "DYNAMODB_ENDPOINT=http://localhost:8000 REWARDS_PLAYERS_TABLE=rewards-players REWARDS_TRANSACTIONS_TABLE=rewards-transactions REWARDS_LEADERBOARD_TABLE=rewards-leaderboard REWARDS_NOTIFICATIONS_TABLE=rewards-notifications AWS_REGION=us-east-1 AWS_ACCESS_KEY_ID=local AWS_SECRET_ACCESS_KEY=local MYSQL_HOST=127.0.0.1 MYSQL_PORT=3306 MYSQL_USER=hijack MYSQL_PASSWORD=hijack_dev MYSQL_DATABASE=hijack_poker STAGE=test jest --config ./test/jest-e2e.json --runInBand"
+    "test:e2e": "NODE_OPTIONS=--experimental-vm-modules DYNAMODB_ENDPOINT=http://localhost:8000 REWARDS_PLAYERS_TABLE=rewards-players REWARDS_TRANSACTIONS_TABLE=rewards-transactions REWARDS_LEADERBOARD_TABLE=rewards-leaderboard REWARDS_NOTIFICATIONS_TABLE=rewards-notifications AWS_REGION=us-east-1 AWS_ACCESS_KEY_ID=local AWS_SECRET_ACCESS_KEY=local MYSQL_HOST=127.0.0.1 MYSQL_PORT=3306 MYSQL_USER=hijack MYSQL_PASSWORD=hijack_dev MYSQL_DATABASE=hijack_poker STAGE=test jest --config ./test/jest-e2e.json --runInBand"
   },
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.500.0",

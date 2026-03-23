@@ -27,6 +27,39 @@ export function getCurrentMonthKey(date = new Date()) {
   return `${date.getUTCFullYear()}-${String(date.getUTCMonth() + 1).padStart(2, '0')}`;
 }
 
+function parseMonthKey(monthKey: string) {
+  const [year, month] = monthKey.split('-').map(Number);
+  return new Date(Date.UTC(year, month - 1, 1));
+}
+
+export function getRecentMonthKeys(count: number, referenceDate = new Date()) {
+  return Array.from({ length: count }, (_, index) => {
+    const offset = count - index - 1;
+    return getCurrentMonthKey(
+      new Date(
+        Date.UTC(
+          referenceDate.getUTCFullYear(),
+          referenceDate.getUTCMonth() - offset,
+          1
+        )
+      )
+    );
+  });
+}
+
+export function buildMonthRange(startMonthKey: string, endMonthKey: string) {
+  const months: string[] = [];
+  const cursor = parseMonthKey(startMonthKey);
+  const end = parseMonthKey(endMonthKey);
+
+  while (cursor <= end) {
+    months.push(getCurrentMonthKey(cursor));
+    cursor.setUTCMonth(cursor.getUTCMonth() + 1);
+  }
+
+  return months;
+}
+
 export function getBasePoints(bigBlind: number) {
   for (const rule of STAKES_POINTS) {
     if (bigBlind >= rule.minBB) {

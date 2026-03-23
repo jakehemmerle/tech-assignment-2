@@ -1,7 +1,27 @@
 import request from 'supertest';
 import { INestApplication } from '@nestjs/common';
 
-import { createTestingApp, ensureRewardsTables, resetRewardsTables } from './setup-e2e';
+import {
+  createTestingApp,
+  ensureRewardsTables,
+  putRewardsTestItem,
+  resetRewardsTables,
+  rewardsTestTables,
+} from './setup-e2e';
+
+function getMonthKeyWithOffset(offset: number) {
+  const date = new Date();
+  date.setUTCDate(1);
+  date.setUTCHours(0, 0, 0, 0);
+  date.setUTCMonth(date.getUTCMonth() + offset);
+
+  return `${date.getUTCFullYear()}-${String(date.getUTCMonth() + 1).padStart(2, '0')}`;
+}
+
+function getMonthFixtureDate(monthKey: string) {
+  const [year, month] = monthKey.split('-').map(Number);
+  return new Date(Date.UTC(year, month - 1, 5));
+}
 
 describe('player endpoints e2e', () => {
   let app: INestApplication;
@@ -52,5 +72,75 @@ describe('player endpoints e2e', () => {
     expect(response.body.total).toBe(3);
     expect(response.body.transactions).toHaveLength(2);
     expect(response.body.offset).toBe(1);
+  });
+
+  it('derives the last six months of tier progression from rewards history', async () => {
+    const twoMonthsAgo = getMonthKeyWithOffset(-2);
+    const currentMonth = getMonthKeyWithOffset(0);
+
+    await putRewardsTestItem(rewardsTestTables.players, {
+      playerId: 'p5-uuid-0005',
+      displayName: 'Echo',
+      currentTier: 1,
+      monthlyPoints: 0,
+      lifetimePoints: 2000,
+      tierFloor: 1,
+      highestTierThisMonth: 1,
+      monthKey: currentMonth,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    });
+
+    await putRewardsTestItem(rewardsTestTables.transactions, {
+      playerId: 'p5-uuid-0005',
+      timestamp: getMonthFixtureDate(twoMonthsAgo).getTime(),
+      type: 'adjustment',
+      basePoints: 2000,
+      multiplier: 1,
+      earnedPoints: 2000,
+      monthKey: twoMonthsAgo,
+      reason: 'timeline fixture',
+      adminId: 'admin-1',
+      createdAt: getMonthFixtureDate(twoMonthsAgo).toISOString(),
+    });
+
+    const response = await request(app.getHttpServer())
+      .get('/api/v1/player/rewards/timeline')
+      .set('X-Player-Id', 'p5-uuid-0005')
+      .expect(200);
+
+    expect(response.body.months).toHaveLength(6);
+
+    const goldMonth = response.body.months.find(
+      (month: { monthKey: string }) => month.monthKey === twoMonthsAgo
+    );
+    expect(goldMonth).toMatchObject({
+      monthKey: twoMonthsAgo,
+      tier: 'Gold',
+      tierLevel: 3,
+      monthlyPoints: 2000,
+      isCurrentMonth: false,
+    });
+
+    const previousMonth = response.body.months.find(
+      (month: { monthKey: string }) => month.monthKey === getMonthKeyWithOffset(-1)
+    );
+    expect(previousMonth).toMatchObject({
+      tier: 'Silver',
+      tierLevel: 2,
+      monthlyPoints: 0,
+      isCurrentMonth: false,
+    });
+
+    const activeMonth = response.body.months.find(
+      (month: { monthKey: string }) => month.monthKey === currentMonth
+    );
+    expect(activeMonth).toMatchObject({
+      monthKey: currentMonth,
+      tier: 'Bronze',
+      tierLevel: 1,
+      monthlyPoints: 0,
+      isCurrentMonth: true,
+    });
   });
 });

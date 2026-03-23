@@ -54,7 +54,7 @@ export default function PointsHistory() {
               transactions.map((tx, i) => (
                 <TableRow key={`${tx.timestamp}-${i}`}>
                   <TableCell>
-                    {new Date(tx.timestamp).toLocaleDateString()}
+                    {new Date(tx.createdAt).toLocaleDateString()}
                   </TableCell>
                   <TableCell>
                     <Chip

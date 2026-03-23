@@ -54,6 +54,18 @@ export interface LeaderboardResponse {
   playerRank: LeaderboardEntry | null;
 }
 
+export interface TimelineMonth {
+  monthKey: string;
+  tier: string;
+  tierLevel: number;
+  monthlyPoints: number;
+  isCurrentMonth: boolean;
+}
+
+export interface TimelineResponse {
+  months: TimelineMonth[];
+}
+
 export interface Notification {
   notificationId: string;
   type: string;
@@ -61,6 +73,7 @@ export interface Notification {
   description: string;
   dismissed: boolean;
   createdAt: string;
+  dismissedAt?: string | null;
 }
 
 export interface NotificationsResponse {
@@ -73,6 +86,9 @@ export const rewardsApi = {
 
   getHistory: (limit = 20, offset = 0) =>
     apiClient.get<HistoryResponse>(`/player/rewards/history?limit=${limit}&offset=${offset}`).then((r) => r.data),
+
+  getTimeline: () =>
+    apiClient.get<TimelineResponse>('/player/rewards/timeline').then((r) => r.data),
 
   getLeaderboard: (limit = 10) =>
     apiClient.get<LeaderboardResponse>(`/leaderboard?limit=${limit}`).then((r) => r.data),

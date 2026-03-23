@@ -1,6 +1,14 @@
 import { Injectable } from '@nestjs/common';
 
-import { getNextTier, getTierByLevel } from '../config/rewards.config';
+import {
+  buildMonthRange,
+  getCurrentMonthKey,
+  getNextTier,
+  getRecentMonthKeys,
+  getTierByLevel,
+  getTierForPoints,
+} from '../config/rewards.config';
+import { TransactionEntity } from '../config/rewards.types';
 import { DynamoService } from '../dynamo/dynamo.service';
 import { NotificationsService } from '../notifications/notifications.service';
 import { RewardsStateService } from '../reconciliation/rewards-state.service';
@@ -61,5 +69,74 @@ export class PlayerService {
       limit,
       offset,
     };
+  }
+
+  async getTimeline(playerId: string) {
+    const player = await this.rewardsStateService.getOrCreateReconciledPlayer(playerId);
+    const transactions = await this.dynamoService.getAllTransactions(playerId);
+    const currentMonthKey = getCurrentMonthKey();
+    const recentMonthKeys = getRecentMonthKeys(6);
+    const derivedTimeline = this.buildTimelineFromTransactions(transactions, currentMonthKey);
+
+    return {
+      months: recentMonthKeys.map((monthKey) => {
+        if (monthKey === currentMonthKey) {
+          return {
+            monthKey,
+            tier: getTierByLevel(player.currentTier).name,
+            tierLevel: player.currentTier,
+            monthlyPoints: player.monthlyPoints,
+            isCurrentMonth: true,
+          };
+        }
+
+        const entry = derivedTimeline.get(monthKey);
+        return {
+          monthKey,
+          tier: getTierByLevel(entry?.tierLevel ?? 1).name,
+          tierLevel: entry?.tierLevel ?? 1,
+          monthlyPoints: entry?.monthlyPoints ?? 0,
+          isCurrentMonth: false,
+        };
+      }),
+    };
+  }
+
+  private buildTimelineFromTransactions(
+    transactions: TransactionEntity[],
+    currentMonthKey: string
+  ) {
+    const orderedTransactions = [...transactions].sort(
+      (left, right) => left.timestamp - right.timestamp
+    );
+    const monthlyPoints = new Map<string, number>();
+
+    for (const transaction of orderedTransactions) {
+      const nextPoints = Math.max(
+        0,
+        (monthlyPoints.get(transaction.monthKey) ?? 0) + transaction.earnedPoints
+      );
+      monthlyPoints.set(transaction.monthKey, nextPoints);
+    }
+
+    const firstMonthKey = orderedTransactions[0]?.monthKey ?? getRecentMonthKeys(6)[0];
+    const monthKeys = buildMonthRange(firstMonthKey, currentMonthKey);
+    const timeline = new Map<string, { tierLevel: number; monthlyPoints: number }>();
+    let previousHighestTier = 1;
+
+    for (const [index, monthKey] of monthKeys.entries()) {
+      const floorTier = index === 0 ? 1 : Math.max(1, previousHighestTier - 1);
+      const points = monthlyPoints.get(monthKey) ?? 0;
+      const tierLevel = Math.max(floorTier, getTierForPoints(points).level);
+
+      timeline.set(monthKey, {
+        tierLevel,
+        monthlyPoints: points,
+      });
+
+      previousHighestTier = tierLevel;
+    }
+
+    return timeline;
   }
 }

@@ -7,10 +7,11 @@ import PointsHistory from '../components/PointsHistory';
 import LeaderboardWidget from '../components/LeaderboardWidget';
 import TierTimeline from '../components/TierTimeline';
 import NotificationBell from '../components/NotificationBell';
-import { rewardsApi, RewardsSummary } from '../api/rewards';
+import { rewardsApi, RewardsSummary, TimelineMonth } from '../api/rewards';
 
 export default function Dashboard() {
   const [summary, setSummary] = useState<RewardsSummary | null>(null);
+  const [timeline, setTimeline] = useState<TimelineMonth[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
@@ -22,9 +23,11 @@ export default function Dashboard() {
       return;
     }
 
-    rewardsApi
-      .getSummary()
-      .then(setSummary)
+    Promise.all([rewardsApi.getSummary(), rewardsApi.getTimeline()])
+      .then(([summaryResponse, timelineResponse]) => {
+        setSummary(summaryResponse);
+        setTimeline(timelineResponse.months);
+      })
       .catch((err) => {
         setError(err.response?.data?.message || 'Failed to load rewards data');
       })
@@ -66,7 +69,7 @@ export default function Dashboard() {
           <SummaryCard data={summary} />
         </Grid>
         <Grid item xs={12} md={4}>
-          <TierTimeline currentTier={summary.currentTier} />
+          <TierTimeline months={timeline} />
         </Grid>
         <Grid item xs={12} md={8}>
           <PointsHistory />

@@ -4,6 +4,7 @@ import { CreateTableCommand, DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import {
   BatchWriteCommand,
   DynamoDBDocumentClient,
+  PutCommand,
   ScanCommand,
 } from '@aws-sdk/lib-dynamodb';
 
@@ -28,6 +29,8 @@ const rawClient = new DynamoDBClient({
 const docClient = DynamoDBDocumentClient.from(rawClient, {
   marshallOptions: { removeUndefinedValues: true },
 });
+
+export const rewardsTestTables = tables;
 
 async function createTable(command: CreateTableCommand) {
   try {
@@ -141,6 +144,15 @@ export async function resetRewardsTables() {
   await clearTable(tables.transactions, ['playerId', 'timestamp']);
   await clearTable(tables.leaderboard, ['monthKey', 'playerId']);
   await clearTable(tables.players, ['playerId']);
+}
+
+export async function putRewardsTestItem(tableName: string, item: Record<string, unknown>) {
+  await docClient.send(
+    new PutCommand({
+      TableName: tableName,
+      Item: item,
+    })
+  );
 }
 
 export async function createTestingApp() {

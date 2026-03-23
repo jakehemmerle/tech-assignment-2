@@ -33,4 +33,9 @@ export class PlayerController {
       paginationQuery.offset ?? 0
     );
   }
+
+  @Get('rewards/timeline')
+  getRewardsTimeline(@Req() request: PlayerRequest) {
+    return this.playerService.getTimeline(request.playerId);
+  }
 }
