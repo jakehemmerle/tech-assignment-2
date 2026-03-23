@@ -227,8 +227,11 @@ All services mount `serverless-v2/shared/` for access to common config and game 
 # Holdem processor (15 tests)
 cd serverless-v2/services/holdem-processor && npm install && npm test
 
-# Rewards API (1 test)
+# Rewards API unit tests
 cd serverless-v2/services/rewards-api && npm install && npm test
+
+# Rewards API integration tests
+cd serverless-v2/services/rewards-api && npm run test:e2e
 
 # Streaks API (1 test)
 cd serverless-v2/services/streaks-api && npm install && npm test

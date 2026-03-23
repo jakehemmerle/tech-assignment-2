@@ -167,41 +167,51 @@ DELETE FROM game_players; DELETE FROM games;
 
 | Service | Port | Purpose |
 |---------|------|---------|
-| **rewards-api** | 5000 | Express-in-Lambda API (serverless-offline) |
+| **rewards-api** | 5000 | NestJS + TypeScript Lambda API (serverless-offline) |
 | **rewards-frontend** | 4000 | Vite + React 18 + MUI + Redux Toolkit |
 
-### API Endpoints (stub)
+### API Endpoints
 
 ```bash
 # Health (working)
 curl http://localhost:5000/api/v1/health
 
-# These return 501 "Not Implemented" — your job to build them:
+# Player summary
 curl http://localhost:5000/api/v1/player/rewards \
   -H 'X-Player-Id: p1-uuid-0001'
 
+# Player history
+curl http://localhost:5000/api/v1/player/rewards/history?limit=10&offset=0 \
+  -H 'X-Player-Id: p1-uuid-0001'
+
+# Player leaderboard
+curl http://localhost:5000/api/v1/leaderboard?limit=10 \
+  -H 'X-Player-Id: p1-uuid-0001'
+
+# Admin-only award
 curl -X POST http://localhost:5000/api/v1/points/award \
   -H 'Content-Type: application/json' \
-  -H 'X-Player-Id: p1-uuid-0001' \
-  -d '{"amount": 100, "reason": "hand_played"}'
+  -H 'X-Admin-Id: admin-1' \
+  -d '{"playerId":"p1-uuid-0001","bigBlind":2,"tableId":1,"tableStakes":"1/2","handId":"local-hand-1"}'
 ```
 
 ### Seed Data
 
 ```bash
-# Requires @aws-sdk/client-dynamodb installed locally
-cd scripts && npm install
-node seed-rewards.js
+# Requires rewards-api dependencies installed locally
+cd serverless-v2/services/rewards-api && npm install
+cd /path/to/poker_rewards
+npm run seed:rewards
 ```
 
 ### Key Files
 
 | File | Purpose |
 |------|---------|
-| `rewards-api/handler.js` | Express app with route mounting |
-| `rewards-api/src/routes/` | Route handlers (health, points, player) |
-| `rewards-api/src/services/dynamo.service.js` | DynamoDB CRUD helpers |
-| `rewards-api/src/config/constants.js` | Tier definitions, point rules |
+| `rewards-api/handler.ts` | NestJS Lambda bootstrap |
+| `rewards-api/src/app.module.ts` | Controller/provider wiring and auth middleware |
+| `rewards-api/src/reconciliation/rewards-state.service.ts` | Shared month reconciliation and player hydration |
+| `scripts/seed-rewards.js` | Deterministic MySQL-linked Dynamo seed generator |
 | `rewards-frontend/src/App.tsx` | React router with placeholder pages |
 | `rewards-frontend/src/api/client.ts` | Axios client pointed at localhost:5000 |
 
